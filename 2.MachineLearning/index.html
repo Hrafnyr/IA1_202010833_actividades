@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <link rel="stylesheet" href="tree.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Machine Learning</title>
@@ -28,6 +31,11 @@
             width: 50%;
 
         }
+        #graph-container {
+            width: 100%;
+            height: 1100px;
+            border: 1px solid lightgray;
+            }
     </style>
 </head>
 <body>
@@ -39,141 +47,56 @@
         <img src="datosC.png">
         
     </div>
+    <h2>RESULTADOS:</h2>
+    <div id="log"></div>    
+    
+        <div id="chart_div" style="width:75%; margin: 0 auto;"></div>
+        <!-- controller -->
+        <script type="text/javascript" src="script.js"></script>
 
     <div>
-        <h2>RESULTADOS:</h2>
-        <p>Score (R²) polinomial: 0.929795948228993</p>
-        <img src="regresion.png">
-        <p>El R² (coeficiente de determinación) indica qué porcentaje de la variabilidad 
-        de los datos de salida <br>
-        (la variable que se predice, en este caso VIA) puede ser explicado por el modelo. <br></p>
+        <p>
+            El <strong>R²</strong> (coeficiente de determinación) indica qué porcentaje de la variabilidad 
+            de los datos de salida (la variable que se predice, en este caso <strong>VÍA</strong>) 
+            puede ser explicado por el modelo ajustado con la variable <strong>ADUANA</strong>.
+        </p>
         
         <p>
-            Puede explicar aproximadamente el 93% de la variabilidad de los datos.
-            Sin embargo, mientras más alto el grado (como 4 o 5), más compleja la curva. <br>
-            Esto puede llevar al sobreajuste si el modelo se ajusta demasiado bien a los datos de 
-            entrenamiento pero falla con nuevos datos.
+            En este caso, el modelo polinomial tiene un <strong>R² de aproximadamente 0.995</strong>, 
+            lo que significa que puede explicar el <strong>99.5%</strong> de la variabilidad de los datos. 
+            Esto indica un ajuste excelente.
         </p>
+        
+        <p>
+            Además, el <strong>Error Cuadrático Medio (MSE)</strong) es de <strong>0.0032</strong>, 
+            lo que sugiere que la diferencia entre las predicciones del modelo y los valores reales es muy baja.
+        </p>
+        
+        <p>
+            Sin embargo, mientras más alto es el grado del polinomio (como grado 4 en este caso), más compleja se vuelve la curva. 
+            Esto puede llevar al <strong>sobreajuste</strong> si el modelo se adapta demasiado bien a los datos de entrenamiento 
+            y pierde capacidad de generalización frente a nuevos datos.
+        </p>
+        
     </div>
 
     <div>
         <h2>ÁRBOL DE DECISIÓN:</h2>
-        <img src="arbol.png">
-        <img src="consola.png">
-        <img src="atributos.png">  
-        <p>
-            Explicación por métrica: <br>
-            Precision = 1.00 <br>
-            De todas las veces que el modelo predijo que una fila pertenecía a la VIA X, el 100% de las veces tenía razón.
-            <br><br>
-            Recall = 1.00<br>
-            De todos los datos que realmente eran de la VIA X, el modelo los detectó todos.
-            <br><br>
-            F1-score = 1.00<br>
-            Es una combinación balanceada entre precision y recall. En este caso también eficiente.
-            <br><br>
-            Support<br>
-            Cantidad de ejemplos reales que había de cada clase en el conjunto de prueba:
-            <br>
-            13 con VIA = 1
-            
-            10 con VIA = 2
-            
-            5 con VIA = 3
-        </p>
-
-        <p>
-            Explicación del árbol de decisión
-            <br>
-            Nodo raíz (arriba):
-            <br>
-            Condición: ADUANA <= 23.0
-            <br>
-            Gini: 0.588 (mide la impureza, valores cercanos a 0 indican nodos puros)
-            <br>
-            Samples: 112 (total de muestras en este nodo)
-            <br>
-            Value: [61, 34, 17] (cantidad de muestras de cada clase: clase 1, clase 2, clase 3)
-            <br>
-            Clase predicha: 1 (la clase más frecuente en este nodo)
-            <br>
-            <br>
-            Primer nivel de división:
-            <br>
-            Si ADUANA > 23.0:
-            <br>
-            Nodo derecho:
-            <br>
-            Gini: 0.0 (nodo puro)
-            <br>
-            Samples: 61
-            <br>
-            Value: [61, 0, 0] (todas las muestras son de la clase 1)
-            <br>
-            Clase predicha: 1
-            <br>
-            <br>
-            Si ADUANA <= 23.0:
-            <br>
-            Nodo izquierdo (se sigue dividiendo):
-            <br>
-            Condición: ADUANA <= 6.0
-            <br>
-            Gini: 0.444
-            <br>
-            Samples: 51
-            <br>
-            Value: [0, 34, 17] (no hay muestras de clase 1, sólo de clase 2 y 3)
-            <br>
-            Clase predicha: 2
-            <br>
-            <br>
-            Segundo nivel de división (para ADUANA <= 23.0):
-            <br>
-            Si ADUANA <= 6.0:
-            <br>
-            Nodo izquierdo:
-            <br>
-            Gini: 0.0 (nodo puro)
-            <br>
-            Samples: 34
-            <br>
-            Value: [0, 34, 0] (todas las muestras son de la clase 2)
-            <br>
-            Clase predicha: 2
-            <br>
-            <br>
-            Si ADUANA > 6.0:
-            <br>
-            Nodo derecho:
-            <br>
-            Gini: 0.0 (nodo puro)
-            <br>
-            Samples: 17
-            <br>
-            Value: [0, 0, 17] (todas las muestras son de la clase 3)
-            <br>
-            Clase predicha: 3
-            <br>
-            <br>
-            Interpretación general
-            <br>
-            El árbol utiliza únicamente la variable ADUANA para clasificar las muestras en las clases de "VIA".
-            <br>
-            Cada nodo terminal (hoja) es completamente puro (gini = 0), lo que significa que todas las muestras en esos nodos pertenecen a una sola clase.
-            <br>
-            El árbol sigue una lógica sencilla:
-            <br>
-            Si ADUANA > 23, siempre predice clase 1.
-            <br>
-            Si ADUANA <= 6, siempre predice clase 2.
-            <br>
-            Si ADUANA está entre 6 y 23, predice clase 3.
+        <div id="table-container"></div>
+        <div id="logTree"></div>
+        <!-- controller -->
+        <div>
+            <p>
+                Esto significa que el modelo acertó en aproximadamente el 86.2% de los casos.
             </p>
-            
+        </div>
+        <div id="graph-container"></div>
+
+        <script src="tree.js"></script>
+
 
     </div>
 
-    <div><a href="https://github.com/Hrafnyr/IA1_202010833_actividades/2.MachineLearning/tarea.py">Repositorio </a></div>
+    <div><a href="https://github.com/Hrafnyr/IA1_202010833_actividades/tree/main/2.MachineLearning">Repositorio </a></div>
 </body>
 </html>
